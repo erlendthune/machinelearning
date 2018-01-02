@@ -20,19 +20,33 @@ grad = zeros(size(theta));
 
 h = sigmoid(X*theta);
 thetareg = theta(2:size(theta))
-Xreg = X(2:size(X),:)
+Xreg = X(1:size(X),2:3)
 
-r = lambda / (2 * m) * sum(thetareg. ^ 2)
+r = lambda / (2 * m) * sum(thetareg.^2)
+
+%Another solution is to calculate r (p below) like this:
+%theta1 = [0 ; theta(2:size(theta), :)];
+%p = lambda*(theta1'*theta1)/(2*m);
 
 J = 1 / m * (-y' * log(h) - (1-y)'*log(1-h)) + r
 
-grad0 = 1 / m * ((h-y)' * X(1:))
+%Another solution is to calculate J like this. Q
+%J = ((-y)'*log(h) - (1-y)'*log(1-h))/m + p;
 
-grad1andon = 1 / m * ((h-y)' * Xreg)
+%grad0 is correct
+grad0 = 1 / m * ((h-y)' * X(:,1))
+
+%Remeber that the sum sign is automatically done when multiplying matrices.
+%Also remember that you might have to transpose a matrix before adding it to another.
+grad1andon = 1 / m * ((h-y)' * Xreg)' + lambda/m*thetareg
 
 grad = [grad0; grad1andon]
+
+%A much more elegant solution
+%grad = (X'*(h - y)+lambda*theta1)/m;
 
 
 % =============================================================
 
 end
+
