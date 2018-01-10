@@ -63,6 +63,19 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 
+-y' * log(h) - (1-y)'*log(1-h));
+
+J = 1 / m 
+
+
+grad0 = 1 / m * ((h-y)' * X(:,1));
+
+grad1andon = 1 / m * ((h-y)' * Xreg)' + lambda/m*thetareg;
+
+grad = [grad0; grad1andon];
+
+
+
 
 
 
