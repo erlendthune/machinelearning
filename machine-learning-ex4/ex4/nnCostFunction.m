@@ -4,10 +4,10 @@ function [J grad] = nnCostFunction(nn_params, ...
                                    num_labels, ...
                                    X, y, lambda)
                                    
-disp("IN Input layer size:"), disp(input_layer_size)
-disp("IN Hidden layer size:"), disp(hidden_layer_size)
-disp("IN Number of labels:"), disp(num_labels)
-disp("IN X size:"), disp(size(X))
+%disp("IN Input layer size:"), disp(input_layer_size)
+%disp("IN Hidden layer size:"), disp(hidden_layer_size)
+%disp("IN Number of labels:"), disp(num_labels)
+%disp("IN X size:"), disp(size(X))
                                    
 %NNCOSTFUNCTION Implements the neural network cost function for a two layer
 %neural network which performs classification
@@ -86,7 +86,7 @@ Theta2_grad = zeros(size(Theta2));
 
 Y=eye(num_labels);
 X = [ones(m, 1) X];
-disp("X size:"), disp(size(X))
+%disp("X size:"), disp(size(X))
 for i = 1:m
 	a1 = X(i,:);
 	%Compute h
@@ -100,6 +100,8 @@ for i = 1:m
 	yi=Y(y(i),:);
     J = J - yi * log(h)' - (1-yi)*log(1-h)';
     
+    
+    %Calculate gradient
     delta3=a3-yi';
     
     %Need to add bias node for activation layer
@@ -108,36 +110,41 @@ for i = 1:m
     delta2=delta2(2:end);
     
     Theta2_grad = Theta2_grad + delta3*a2;
-%    disp("Size a1"),disp(size(a1))
-%    disp("Size delta2"), disp(size(delta2))
-%    disp("Size Theta1_grad"), disp(size(Theta1_grad))
 
     Theta1_grad = Theta1_grad + delta2*a1;
 end
 
 J = J / m; 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % add regularization to cost function
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Theta1_reg = Theta1(:,2:size(Theta1)(2));
 r1_a = Theta1_reg.^2;
 r1_b = sum(r1_a);
 r1 = sum(r1_b);
 
-disp("r1:"), disp(r1)
+%disp("r1:"), disp(r1)
 
 Theta2_reg = Theta2(:,2:size(Theta2)(2));
 r2_a = Theta2_reg.^2;
 r2_b = sum(r2_a);
 r2 = sum(r2_b);
 
-disp("r2:"), disp(r2)
+%disp("r2:"), disp(r2)
 
 r = lambda/(2*m)*(r1 + r2);
 
-J = J + r
+J = J + r;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% add regularization to gradient
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Theta1_grad = Theta1_grad / m;
+Theta1_grad(:,2:end) +=  Theta1(:,2:end)*lambda/m;
 Theta2_grad = Theta2_grad / m;
+Theta2_grad(:,2:end) += Theta2(:,2:end)*lambda/m;
 
 % -------------------------------------------------------------
 
