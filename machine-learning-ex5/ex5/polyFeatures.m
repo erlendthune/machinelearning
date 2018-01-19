@@ -14,12 +14,15 @@ X_poly = zeros(numel(X), p);
 %               column of X contains the values of X to the p-th power.
 %
 % 
-
-
-
-
-
+   for i = 1:p
+     X_poly(:,i) = X.^i;
+   end
 
 % =========================================================================
 
 end
+%!test
+%! X = [1 2 3]'
+%! Xp = polyFeatures(X, 3)
+%! expected_xp = [1 1 1; 2 4 8; 3 9 27]
+%! assert(Xp, expected_xp, 0)
