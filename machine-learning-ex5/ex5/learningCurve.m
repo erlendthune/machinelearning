@@ -49,10 +49,14 @@ error_val   = zeros(m, 1);
            % X(1:i, :) and y(1:i), storing the result in 
            % error_train(i) and error_val(i)
 
-           
+		   theta = trainLinearReg(X(1:i, :), y(1:i), lambda);
+		   [J, grad] = linearRegCostFunction(X(1:i, :), y(1:i), theta, 0);
+		   error_train(i) = J; 
+		   [Jval, grad] = linearRegCostFunction(Xval, yval, theta, 0);
+		   error_val(i) = Jval;
        end
-
-
+	
+	   
 % ---------------------- Sample Solution ----------------------
 
 
@@ -66,3 +70,10 @@ error_val   = zeros(m, 1);
 % =========================================================================
 
 end
+%!test
+%! X = [[1 1 1 1]' magic(4)];
+%! y = [7 6 5 4]';
+%! Xval = [[1 1 1 1]' magic(4)];
+%! yval = [7 6 5 4]';
+%! lambda = 0
+%! [error_train, error_val] = learningCurve(X, y, Xval, yval, lambda);
